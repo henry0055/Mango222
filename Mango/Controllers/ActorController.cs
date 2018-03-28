@@ -69,10 +69,10 @@ namespace Mango.Controllers
         }
 
         [HttpGet("{cantidad}")]
-        public IActionResult GetRandomActor(int cantidad)
+        public IActionResult GetRandom(int cantidad)
         {
             return Json(
-                _actorService.GetRandomActor(cantidad)
+                _actorService.GetRandom(cantidad)
              );
         }
 

@@ -18,6 +18,7 @@ namespace Services
         bool Update(Comentario model);
         bool Delete(int comentarioid);
         Comentario Get(int id);
+        List<Comentario> GetComentarios(int idMedia);
 
     }
 
@@ -127,7 +128,22 @@ namespace Services
             return true;
         }
 
+        public List<Comentario> GetComentarios(int idMedia) // obtener una persona por un id.
+        {
+            var result = new List<Comentario>();
+            try
+            {
 
+                result = _DbContext.comentario.Where(x => x.IdMedia == idMedia).ToList();
+
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return result;
+        }
 
 
 

@@ -13,6 +13,9 @@ namespace Model
         public string Temporadas { get; set; }
         public string Estado { get; set; }
         public string Imagen { get; set; } 
+        public string Sinopsis { get; set; }
+        public int Contador { get; set; }
+        public int Acumulado { get; set; }
         public DateTime Estreno { get; set; }
 
 

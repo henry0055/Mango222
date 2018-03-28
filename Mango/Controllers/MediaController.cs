@@ -34,7 +34,7 @@ namespace Mango.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult GetSingle(int id)
         {
             return Json(
                 _mediaService.Get(id)
@@ -70,13 +70,20 @@ namespace Mango.Controllers
         }
 
         [HttpGet("{cantidad}")]
-        public IActionResult GetRandomMedia(int cantidad)
+        public IActionResult GetRandom(int cantidad)
         {
             return Json(
-                _mediaService.GetRandomMedia(cantidad)
+                _mediaService.GetRandom(cantidad)
              );
         }
 
+        [HttpPost]
+        public IActionResult Calificar(Media model)
+        {
+            return Json(
+                _mediaService.Calificar(model.Id , model.Acumulado)
+                );
+        }
 
     }
 }

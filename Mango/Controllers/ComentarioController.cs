@@ -68,6 +68,13 @@ namespace Mango.Controllers
            );
         }
 
+        [HttpGet("{idMedia}")]
+        public IActionResult GetComentarios(int idMedia)
+        {
+            return Json(
+                _comentarioService.GetComentarios(idMedia)
+             );
+        }
 
 
     }

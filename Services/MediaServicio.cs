@@ -16,7 +16,8 @@ namespace Services
         bool Delete(int mediaid);
         Media Get(int id);
         Media primero();
-        List<Media> GetRandomMedia(int cantidad);
+        List<Media> GetRandom(int cantidad);
+        bool Calificar(int id, int acumulado);
     }
     
 
@@ -98,6 +99,8 @@ namespace Services
                     originalModel.Estado = model.Estado;
                     originalModel.Imagen = model.Imagen;
                     originalModel.Estreno = model.Estreno;
+                    originalModel.Contador = model.Contador;
+                    originalModel.Acumulado = model.Acumulado;
 
                    
                     _DbContext.Update(originalModel);
@@ -143,7 +146,7 @@ namespace Services
                 return result;
             }
 
-        public List<Media>GetRandomMedia(int cantidad) 
+        public List<Media>GetRandom(int cantidad) 
         {
             var result = new List<Media>();
             try
@@ -160,6 +163,32 @@ namespace Services
             return result;
         }
 
+
+        public bool Calificar(int id , int acumulado)
+        {
+            try
+            {
+
+                var originalModel = _DbContext.medias.Single(x =>
+                    x.Id == id
+                    );
+
+
+                originalModel.Contador = originalModel.Contador + 1 ;
+                originalModel.Acumulado = originalModel.Acumulado + acumulado ;
+
+
+                _DbContext.Update(originalModel);
+                _DbContext.SaveChanges();
+
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+            return true;
+        }
 
     }
 

@@ -16,7 +16,7 @@ namespace Services
         bool Update(Actor model);
         bool Delete(int actorid);
         Actor Get(int id);
-        List<Actor> GetRandomActor(int cantidad);
+        List<Actor> GetRandom(int cantidad);
 
     }
 
@@ -130,7 +130,7 @@ namespace Services
             return true;
         }
 
-        public List<Actor> GetRandomActor(int cantidad)
+        public List<Actor> GetRandom(int cantidad)
         {
             var result = new List<Actor>();
             try
