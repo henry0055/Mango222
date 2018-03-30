@@ -5,8 +5,8 @@
     	<div class="container">
     		<h2  class="nino-sectionHeading">
 				<span class="nino-subHeading"></span>
-				 {{media.nombre}} 9.0
-			 
+				 {{media.nombre}} 
+				 
 			</h2>
 			
 			<div class="sectionContent">
@@ -55,7 +55,7 @@
 								</div>
 								<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 									<div class="panel-body">
-										<h5>{{media.sipnosis}}</h5>
+										<h5>{{media.sinopsis}}</h5>
 									</div>
 								</div>
 							</div>
@@ -83,12 +83,17 @@
 							</div>
 						</div>
 					</li>
-					<li >
-						<div layout="row">
+					<li>
+						<div  layout="row">
 							<div class="nino-symbol fsr">
 								<i class="mdi mdi-comment-multiple-outline nino-icon"></i>
 							</div>
-							<div>
+
+							<h2 v-if="!this.$session.exists()"   class="nino-sectionHeading" >
+							<span class="text">¿Quieres comentar? <router-link to="/login"> Inicia sesion </router-link> </span>
+							</h2>
+
+							<div v-if="this.$session.exists()" >
 								<textarea id="textArea" rows="4" cols="118"  v-model="comentario.contenido"></textarea>
 								<button v-on:click="comentar()" >Comentar</button>
 							</div>
@@ -109,41 +114,22 @@ import axios from 'axios'
 export default {
 	
   name:"SingleMedia",
+  created(){
+	  this.CargarComentarios(),
+	  this.CargarMedia(),
+	  this.CargarSesion()
+  },
   data:function(){
 	  return{
-	  nada : 'nadai' ,
+	  
 	  rating :0,
 	  comentarios:[],
-	  id : this.$route.params.id,
-	  numero : 1008,	
-	  media:{},
-	  usuario:{
-		  id:this.$session.get('id')
-	  },
-	  comentario :{contenido:'', IdPersona :0  ,IdMedia:this.$route.params.id },
+	  ///id : this.$route.params.id,
 	 
-	  media : 
-			(axios.get('http://localhost:2210/api/media/GetSingle/'+ this.$route.params.id).then(response => {
-					if(response.data != null){
-						this.media = response.data;
-
-					}else{
-						swal("Error internoo , Media", '', 'error');
-					}
-				},
-			)) ,
-		
-		
-		comentarios:
-			(axios.get('http://localhost:2210/api/comentario/GetComentarios/'+ this.$route.params.id ).then(response =>{
-				if(response.data != null){
-					this.comentarios = response.data;
-
-				}else{
-					swal("Error internoo , Media, comentarios", '', 'error');
-				}
-			}))
-
+	  media:{},
+	  usuario:{},
+	  comentario :{contenido:'', IdPersona :this.$session.get('id') ,IdMedia:this.$route.params.id },
+	 
       }
    },
 
@@ -152,13 +138,26 @@ export default {
 		   axios.post('http://localhost:2210/api/comentario/post',this.comentario).then(response => {
 			   if(response.data != null){
 				   swal("Tu comentario ha sido agregado exitosamente, comentarios", '', 'success');
-				   this.comentario = {contenido:'', IdPersona :0 },
-				   this.CargarComentarios()
-
+				   this.comentario = {contenido:'', IdPersona : this.$session.get('id') , idMedia:this.$route.params.id },
+				   this.CargarComentarios(),
+				   this.CargarSesion()
 			   }else{
 				   	swal("Error internoo Agregando Comentario, comentarios", '', 'error');
 			   }
 		   })
+	   },
+
+	   CargarMedia:function(){
+		   (axios.get('http://localhost:2210/api/media/GetSingle/'+ this.$route.params.id).then(response => {
+					if(response.data != null){
+						this.media = response.data;
+
+					}else{
+						swal("Error internoo , Media", '', 'error');
+					}
+				},
+			)) 
+
 	   },
 	   CargarComentarios : function(){
 		   axios.get('http://localhost:2210/api/comentario/GetComentarios/'+ this.$route.params.id ).then(response =>{
@@ -169,6 +168,14 @@ export default {
 					swal("Error internoo , Media, comentarios", '', 'error');
 				}
 			})
+	   },
+	   CargarSesion:function(){
+		  this.usuario.id= this.$session.get('id'),
+		  this.usuario.nombre= this.$session.get('nombre'),
+		  this.usuario.apellidos = this.$session.get('apellidos'),
+		  this.usuario.correo = this.$session.get('correo'),
+		  this.usuario.foto = this.$session.get('foto'),
+		  this.usuario.nacimiento = this.$session.get('nacimiento')
 	   }
 
    }

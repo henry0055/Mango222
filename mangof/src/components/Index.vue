@@ -19,7 +19,7 @@
 								</router-link>
 								<h4 class="nino-serviceTitle">{{media.nombre}}</h4>
 								<h4 class="nino-serviceTitle">{{media.id}}</h4>
-								<p>Photography is the science, art and practice of creating durable images by recording light or other electromagnetic radiation</p>
+								<p> {{media.sinopsis}}</p>
 								<button class="btn btn-danger" v-on:click="EliminarMedia(media.id)">Borrar</button>
 							</div>
 						</div>
@@ -44,7 +44,9 @@
 							<i class="mdi mdi-apple-keyboard-command nino-icon fsr"></i>
 							<div>
 								<router-link v-bind:to="{name: 'sm', params: {id: media.id}}">
-									<img src="@/assets/images/story\img-1.jpg" alt="">
+									
+									<!-- <img src="@/assets/images/story\img-1.jpg" alt=""> -->
+									<img src="@/assets/images/what-we-do/img-1.jpg" alt="">
 								</router-link>
 								<h4 class="nino-serviceTitle">{{media.nombre}}</h4>
 								<h4 class="nino-serviceTitle">{{media.estreno}}</h4>

@@ -128,7 +128,7 @@
 		</form>
 	</div>
 	<!-- end:Main Form -->
-</div>
+    </div>
   </div>
 </template>
  

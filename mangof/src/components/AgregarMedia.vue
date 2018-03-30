@@ -4,7 +4,7 @@
     <div>
         <h1>AGREGAR PELICULA/SERIE</h1>
 
-        <form >
+        <form v-on:submit.prevent="AgregarMedia">
             <div>
                 <label for="Nombre"> Nombre</label>
                 <input type="text" id="Nombre" v-model="media.nombre">
@@ -37,7 +37,11 @@
                 <input type="date" v-model="media.estreno" >
 
             </div>
-            <button class="btn btn-warning" v-on:click="AgregarMedia" >Agregar</button>
+            <div>
+                <label for="Sipnosis"> Sipnosis</label>
+                <textarea maxlength="140" id="sipnosis" v-model="media.sinopsis"></textarea>
+            </div>
+            <button type="submit" class="btn btn-warning"  >Agregar</button>
             
         </form>
 
@@ -66,6 +70,7 @@ export default {
               duracion :this.horas + 'h'+this.minutos+'min',
               temporadas :0,
               estreno : Date() ,
+              sinopsis : '',
           }
       }
   },
@@ -83,6 +88,7 @@ export default {
                         duracion :'',
                         temporadas :0,
                         estreno : Date() ,
+                        sinopsis : '',
                     }
                    
               }else{

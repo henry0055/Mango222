@@ -1,43 +1,55 @@
 <template>
   <div >
-      <div >
-          
-              
-      <form id="form"class="nino-subscribeForm">
+  <div>
 
-          <div class="form-group" >
-              <label  for="username" class="nino-sectionHeading" > Nombre de Usuario</label>
-              <input type="text" id="username" v-model="usuario.username" >
-            </div>
 
-          <div class="form-group" id="divForm" >
-              <label class="nino-sectionHeading" for="exampleInputPassword1" > Password</label>
-              <input type="password" id="exampleInputPassword1"  v-model="usuario.password" >
-          </div >
+      <div class="text-center" style="padding:50px 0">
+	<div class="logo">Registrate</div>
+	<!-- Main Form -->
+	<div class="login-form-1">
+		<form v-on:submit.prevent="agregarUsuario" id="register-form" class="text-left">
+			<div class="login-form-main-message"></div>
+			<div class="main-login-form">
+				<div class="login-group">
+					<div class="form-group">
+						<label for="reg_username" class="sr-only">Email address</label>
+						<input v-model="usuario.username" type="text" class="form-control" id="reg_username" name="reg_username" placeholder="usuario">
+					</div>
+					<div class="form-group">
+						<label for="reg_password" class="sr-only">Password</label>
+						<input v-model="usuario.password" type="password" class="form-control" id="reg_password" name="reg_password" placeholder="clave">
+					</div>
+					<div class="form-group">
+						<label for="reg_password_confirm" class="sr-only">Password Confirm</label>
+						<input v-model="confirmacionPass" type="password" class="form-control" id="reg_password_confirm" name="reg_password_confirm" placeholder="Confima clave">
+					</div>
+					
+					<div class="form-group">
+						<label for="reg_email" class="sr-only">Email</label>
+						<input v-model="usuario.correo" type="text" class="form-control" id="reg_email" name="reg_email" placeholder="Correo">
+					</div>
+					<div class="form-group">
+						<label for="reg_fullname" class="sr-only">Full Name</label>
+						<input v-model="usuario.nombre" type="text" class="form-control" id="reg_fullname" name="reg_fulllname" placeholder="Nombre">
+					</div>
+					<div class="form-group">
+						<label for="reg_fullname" class="sr-only">Full Name</label>
+						<input v-model="usuario.apellidos" type="text" class="form-control" id="reg_fullname" name="reg_fullname" placeholder="Apellido">
+					</div>
+					
+				</div>
+				<button  type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+			</div>
+			<div class="etc-login-form">
+				<p>¿Ya tienes una cuenta? <router-link to="/login">accede aqui </router-link></p>
+			</div>
+		</form>
+	</div>
+	<!-- end:Main Form -->
+</div>
 
-          <div>
-              <label for="nombre" class="nino-sectionHeading"> Nombre </label>
-              <input type="text"   id="nombre" v-model="usuario.nombre">
-              
-          </div >
-          <div class="form-group">
-              <label for="apellidos" class="nino-sectionHeading"> Apellidos</label>
-              <input type="text" id="apellidos" v-model="usuario.apellidos" >
-          </div>
-          <div class="form-group">
-              <label for="correo"class="nino-sectionHeading" > Correo</label>
-              <input type="text" id="correo" v-model="usuario.correo">
-          </div>
-          <div>
-              <input type="file"  @change="subirImagen($e)" >
-          </div>
-          <div class="form-group">
-          <!-- <button v-on:click="AgregarUsuario">Agregar</button> -->
-          
-          <button class="btn success" v-on:click="agregarUsuario">Agregar</button>
-<pre>{{$data}}</pre>
-          </div>
-      </form>
+ 
+      <pre>{{$data}}</pre>
       </div>
   </div>
 </template>
@@ -56,69 +68,73 @@
 <script type="text/javascript">
 import axios from "axios";
 export default {
-  name:"CrearUsuario",
+  name: "CrearUsuario",
 
-  data: function () {
-      return {
-          usuario : {username:'' ,password:'',nombre:'',apellidos:'',correo:'',foto:''},
-          usuarios: []  ,
-          file : {},
-
-      }
-    
+  data: function() {
+    return {
+      confirmacionPass: "",
+      usuario: {
+        username: "",
+        password: "",
+        nombre: "",
+        apellidos: "",
+        correo: "",
+        foto: ""
+      },
+      usuarios: [],
+      file: {}
+    };
   },
-  methods:{
+  methods: {
+    agregarUsuario: function() {
+      if (this.usuario.password == this.confirmacionPass) {//Verifica si coinciden las claves
+        axios
+          .post("http://localhost:2210/api/persona/post", this.usuario)
+          .then(response => {
+            if (response.data != null) {
+              swal("Agregado Exitosmente", "", "success");
 
+              this.usuario = {//vaciar el objeto
+                username: "",
+                password: "",
+                nombre: "",
+                apellidos: "",
+                correo: "",
+                foto: ""
+              };
+            } else {
+              swal("Error interno", "", "error");
+            }
+          });
+      } else {
+        swal("Alerta", "Las claves no coinciden", "warning");
+        (this.usuario.password = ""), (this.confirmacionPass = "");//Si no coinciden las claves , vacia los campos
+      }
+    },
 
-        agregarUsuario:function(){
-            axios.post('http://localhost:2210/api/persona/post' , this.usuario).then(response => {
-                        if(response.data != null){
-                            swal("Agregado Exitosmente", '', 'success');
-                            this.usuario = {username:'' ,password:'',nombre:'',apellidos:'',correo:'',foto:''};
-                            
-                        } else {
-                            swal("Error interno", '', 'error');
-                        }
-                    });
-                },
-
-            subirImagen : function(e){
-            this.file = e.files[0];
-        }
-        
-        },
-
-        
-        
-            
-}
-  
-  
-
+    subirImagen: function(e) {
+      this.file = e.files[0];
+    }
+  }
+};
 </script>
 
 <style>
 #divForm {
-
-  
- 
   align-content: center;
 }
 
-.pass{
-    display: block;
-    width: 50%;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-
- }
-
-
+.pass {
+  display: block;
+  width: 50%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 </style>
